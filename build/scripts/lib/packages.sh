@@ -1,5 +1,39 @@
 #!/bin/sh
 
+# VOS_KERNEL_DEBS=<dir>: install the kernel from .debs built by
+# build/scripts/kernel/build-cachyos-rt.sh instead of Debian's
+# linux-image-rt-amd64 (amd64 only). Strips Debian's kernel packages from a
+# package list; the custom ones are installed by vos_install_kernel_debs.
+vos_use_custom_kernel() {
+    [ -n "${VOS_KERNEL_DEBS:-}" ] && [ "$1" = "amd64" ]
+}
+
+vos_filter_kernel_pkgs() {
+    _arch="$1"; shift
+    if vos_use_custom_kernel "$_arch"; then
+        # initramfs-tools normally arrives as a dependency of linux-image-*.
+        printf '%s' "$*" | sed -e 's/linux-image-rt-amd64//g' \
+            -e 's/linux-headers-rt-amd64//g' -e 's/$/ initramfs-tools/'
+    else
+        printf '%s' "$*"
+    fi
+}
+
+# Install the custom kernel .debs into a chroot/rootfs mounted at $2.
+vos_install_kernel_debs() {
+    _arch="$1"; _root="$2"
+    vos_use_custom_kernel "$_arch" || return 0
+    ls "$VOS_KERNEL_DEBS"/linux-image-*.deb "$VOS_KERNEL_DEBS"/linux-headers-*.deb >/dev/null 2>&1 \
+        || die "VOS_KERNEL_DEBS=$VOS_KERNEL_DEBS has no linux-image/linux-headers .debs (run build-cachyos-rt.sh)"
+    log_step "Installing custom kernel from $VOS_KERNEL_DEBS..."
+    sudo mkdir -p "$_root/kerneldebs"
+    sudo cp "$VOS_KERNEL_DEBS"/linux-image-*.deb "$VOS_KERNEL_DEBS"/linux-headers-*.deb \
+        "$VOS_KERNEL_DEBS"/linux-libc-dev_*.deb "$_root/kerneldebs/" 2>/dev/null || true
+    chroot_isolated "$_root" /usr/bin/env DEBIAN_FRONTEND=noninteractive /bin/bash -c "\
+dpkg -i /kerneldebs/*.deb && rm -rf /kerneldebs" \
+        || die "custom kernel install failed"
+}
+
 get_base_packages() {
     _arch="$1"
     case "$_arch" in

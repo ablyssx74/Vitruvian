@@ -3,4 +3,4 @@
 	url = https://github.com/bombela/backward-cpp.git
 [submodule "src/system/kernel/nexus"]
 	path = src/system/kernel/nexus
-	url = https://github.com/Numerio/Nexus.git
+	url = git@github.com:ablyssx74/Nexus.git

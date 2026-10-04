@@ -225,8 +225,8 @@ create_raw() {
 
     log_step "Configuring system, installing Vitruvian, and setting up bootloader..."
 
-    _raw_pkgs="$(get_raw_image_packages "$_arch")"
-    _raw_dev_pkgs="$(get_dev_packages "$_arch")"
+    _raw_pkgs="$(vos_filter_kernel_pkgs "$_arch" "$(get_raw_image_packages "$_arch")")"
+    _raw_dev_pkgs="$(vos_filter_kernel_pkgs "$_arch" "$(get_dev_packages "$_arch")")"
     _raw_kver="$(ls -1 "$_root_dir/lib/modules" | sort -V | tail -1)"
     sudo chroot "$_root_dir" /usr/bin/env DEBIAN_FRONTEND=noninteractive /bin/bash -c "set -e
 apt-get install -y --download-only --no-install-recommends $_raw_pkgs \

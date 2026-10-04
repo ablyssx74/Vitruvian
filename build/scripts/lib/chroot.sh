@@ -235,8 +235,8 @@ VOSEOF
         sudo mkdir -p "$_chroot_dir/$_d"
     done
 
-    _base_pkgs="$(get_base_packages "$_arch")"
-    _dev_pkgs="$(get_dev_packages "$_arch")"
+    _base_pkgs="$(vos_filter_kernel_pkgs "$_arch" "$(get_base_packages "$_arch")")"
+    _dev_pkgs="$(vos_filter_kernel_pkgs "$_arch" "$(get_dev_packages "$_arch")")"
 
     log_step "Installing packages..."
     # dpkg's per-file fsyncs are pure overhead on a chroot that gets
@@ -254,6 +254,8 @@ apt update && apt install -y --download-only --no-install-recommends $_base_pkgs
 apt install -y --no-install-recommends $_base_pkgs $_dev_pkgs \$DEBUG_PACKAGES && \
 echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && locale-gen && \
 exit"
+
+    vos_install_kernel_debs "$_arch" "$_chroot_dir"
 
     ls "$_chroot_dir/lib/modules" | head -n1 > "$_basedir/imagekernelversion.conf"
 
