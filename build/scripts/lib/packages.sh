@@ -27,8 +27,11 @@ vos_install_kernel_debs() {
         || die "VOS_KERNEL_DEBS=$VOS_KERNEL_DEBS has no linux-image/linux-headers .debs (run build-cachyos-rt.sh)"
     log_step "Installing custom kernel from $VOS_KERNEL_DEBS..."
     sudo mkdir -p "$_root/kerneldebs"
-    sudo cp "$VOS_KERNEL_DEBS"/linux-image-*.deb "$VOS_KERNEL_DEBS"/linux-headers-*.deb \
-        "$VOS_KERNEL_DEBS"/linux-libc-dev_*.deb "$_root/kerneldebs/" 2>/dev/null || true
+    for _d in "$VOS_KERNEL_DEBS"/linux-image-*.deb "$VOS_KERNEL_DEBS"/linux-headers-*.deb \
+            "$VOS_KERNEL_DEBS"/linux-libc-dev_*.deb; do
+        case $_d in *-dbg_*|*'*'*) continue ;; esac   # skip debug-symbol pkg
+        sudo cp "$_d" "$_root/kerneldebs/"
+    done
     chroot_isolated "$_root" /usr/bin/env DEBIAN_FRONTEND=noninteractive /bin/bash -c "\
 dpkg -i /kerneldebs/*.deb && rm -rf /kerneldebs" \
         || die "custom kernel install failed"

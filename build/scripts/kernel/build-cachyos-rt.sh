@@ -94,5 +94,9 @@ echo ">> Building $KVER-vos-rt ($MARCH) with $JOBS jobs"
 make -j"$JOBS" bindeb-pkg KBUILD_BUILD_USER=vitruvian KBUILD_BUILD_HOST=vitruvian
 
 mkdir -p "$OUTDIR"
-cp ../linux-image-*.deb ../linux-headers-*.deb ../linux-libc-dev_*.deb "$OUTDIR"/
+# Skip the -dbg package (~1.4GB of vmlinux debug symbols): not needed in images.
+for d in ../linux-image-*.deb ../linux-headers-*.deb ../linux-libc-dev_*.deb; do
+    case $d in *-dbg_*) continue ;; esac
+    cp "$d" "$OUTDIR"/
+done
 echo ">> Done: $(ls "$OUTDIR" | tr '\n' ' ')"
