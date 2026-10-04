@@ -19,6 +19,7 @@ set(SYSTEM_APPS
 	DriveSetup
 	Expander
 	GLTeapot
+	HDesktop
 	Installer
 	LaunchBox
 	Magnify
