@@ -193,8 +193,8 @@ public:
 		s.resizePending = true;
 	}
 
-	// The dock repaints itself on demand from its render loop.
-	virtual void Draw(BRect) {}
+	// Draw() is BGLView's own: the renderer shows the last frame the render
+	// thread produced (the surfaceless renderer blits its bitmap here).
 
 	virtual void MouseMoved(BPoint where, uint32 code, const BMessage*)
 	{
@@ -404,7 +404,12 @@ inline void HD_ApplyPendingResize(SDL_Window* window)
 		w = s.pendingW;
 		h = s.pendingH;
 	}
-	window->GLView()->BGLView::FrameResized(w, h);
+	HDGLView* view = window->GLView();
+	view->BGLView::FrameResized(w, h);
+	// The renderer's resize leaves no GL context current on this thread;
+	// take it again (and its framebuffer binding).
+	view->UnlockGL();
+	view->LockGL();
 }
 
 inline void SDL_GL_SwapWindow(SDL_Window* window)
@@ -468,6 +473,8 @@ inline int SDL_PushEvent(SDL_Event* event)
 inline int SDL_PollEvent(SDL_Event* event)
 {
 	hdvos::State& s = hdvos::S();
+	if (s.window != NULL)
+		HD_ApplyPendingResize(s.window);
 	if (acquire_sem_etc(s.eventSem, 1, B_RELATIVE_TIMEOUT, 0) != B_OK)
 		return 0;
 	return hdvos::Pop(event) ? 1 : 0;
@@ -476,6 +483,8 @@ inline int SDL_PollEvent(SDL_Event* event)
 inline int SDL_WaitEventTimeout(SDL_Event* event, int timeoutMs)
 {
 	hdvos::State& s = hdvos::S();
+	if (s.window != NULL)
+		HD_ApplyPendingResize(s.window);
 	if (acquire_sem_etc(s.eventSem, 1, B_RELATIVE_TIMEOUT,
 			(bigtime_t)timeoutMs * 1000) != B_OK)
 		return 0;
