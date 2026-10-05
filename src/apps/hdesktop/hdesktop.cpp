@@ -64,9 +64,13 @@
 #include <Screen.h>
 #include <ScrollView.h>
 #include <signal.h> // sigaction/raise -- SetupDirectCaptureIfNeeded()'s SIGSEGV/SIGBUS safety net
+#ifdef VITRUVIAN
+#include "HDSdlCompat.h"
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_syswm.h>
+#endif
 #include <set>
 #include <Shape.h>
 #include <stdio.h>

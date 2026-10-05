@@ -48,7 +48,7 @@ get_base_packages() {
                 " procps vim-tiny libbinutils openssh-server locales libnss-myhostname xdg-user-dirs ca-certificates iputils-ping linux-sysctl-defaults xfsprogs" \
                 " fdisk e2fsprogs btrfs-progs cryptsetup dosfstools" \
                 " fortune-mod ncurses-bin rsync" \
-                " pipewire-audio pipewire-bin wireplumber libsdl2-2.0-0 libglu1-mesa libcurl4t64 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav" \
+                " pipewire-audio pipewire-bin wireplumber libglu1-mesa libcurl4t64 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav" \
                 " cups cups-filters printer-driver-gutenprint printer-driver-cups-pdf" \
                 " firmware-iwlwifi firmware-atheros firmware-realtek firmware-libertas firmware-brcm80211 firmware-misc-nonfree" \
                 " firmware-intel-graphics firmware-amd-graphics firmware-nvidia-graphics firmware-mediatek bluez-firmware" \
@@ -64,7 +64,7 @@ get_base_packages() {
                 " procps vim-tiny libbinutils openssh-server locales libnss-myhostname xdg-user-dirs ca-certificates iputils-ping linux-sysctl-defaults xfsprogs" \
                 " fdisk e2fsprogs btrfs-progs cryptsetup dosfstools" \
                 " fortune-mod ncurses-bin rsync" \
-                " pipewire-audio pipewire-bin wireplumber libsdl2-2.0-0 libglu1-mesa libcurl4t64 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav" \
+                " pipewire-audio pipewire-bin wireplumber libglu1-mesa libcurl4t64 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav" \
                 " cups cups-filters printer-driver-gutenprint printer-driver-cups-pdf" \
                 " grub-common grub2-common grub-efi-arm64-bin"
             ;;
@@ -76,7 +76,7 @@ get_base_packages() {
                 " procps vim-tiny libbinutils openssh-server locales libnss-myhostname xdg-user-dirs ca-certificates iputils-ping linux-sysctl-defaults" \
                 " fdisk e2fsprogs" \
                 " fortune-mod ncurses-bin rsync" \
-                " pipewire-audio pipewire-bin wireplumber libsdl2-2.0-0 libglu1-mesa libcurl4t64 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav" \
+                " pipewire-audio pipewire-bin wireplumber libglu1-mesa libcurl4t64 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav" \
                 " cups cups-filters printer-driver-gutenprint printer-driver-cups-pdf" \
                 " grub-common"
             ;;
@@ -88,7 +88,7 @@ get_base_packages() {
                 " procps vim-tiny libbinutils openssh-server locales libnss-myhostname xdg-user-dirs ca-certificates iputils-ping linux-sysctl-defaults xfsprogs" \
                 " fdisk e2fsprogs btrfs-progs cryptsetup dosfstools" \
                 " fortune-mod ncurses-bin rsync" \
-                " pipewire-audio pipewire-bin wireplumber libsdl2-2.0-0 libglu1-mesa libcurl4t64 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav" \
+                " pipewire-audio pipewire-bin wireplumber libglu1-mesa libcurl4t64 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-libav" \
                 " cups cups-filters printer-driver-gutenprint printer-driver-cups-pdf" \
                 " grub-common grub2-common grub-efi-riscv64-bin"
             ;;
@@ -112,7 +112,7 @@ get_dev_packages() {
                 " libgcrypt20-dev libapt-pkg-dev" \
                 " libjpeg-dev libpng-dev libtiff-dev libwebp-dev libicns-dev" \
                 " libpipewire-0.3-dev libspa-0.2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev" \
-                " libglu1-mesa-dev libsdl2-dev libcurl4-openssl-dev libnm-dev libbluetooth-dev"
+                " libglu1-mesa-dev libcurl4-openssl-dev libnm-dev libbluetooth-dev"
             ;;
         arm64)
             printf '%s' \
@@ -125,7 +125,7 @@ get_dev_packages() {
                 " libgcrypt20-dev libapt-pkg-dev" \
                 " libjpeg-dev libpng-dev libtiff-dev libwebp-dev libicns-dev" \
                 " libpipewire-0.3-dev libspa-0.2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev" \
-                " libglu1-mesa-dev libsdl2-dev libcurl4-openssl-dev libnm-dev libbluetooth-dev"
+                " libglu1-mesa-dev libcurl4-openssl-dev libnm-dev libbluetooth-dev"
             ;;
         arm32)
             printf '%s' \
@@ -137,7 +137,7 @@ get_dev_packages() {
                 " libxkbcommon-dev libsystemd-dev libpam0g-dev libpwquality-dev" \
                 " libgcrypt20-dev libapt-pkg-dev" \
                 " libjpeg-dev libpng-dev libtiff-dev libwebp-dev libicns-dev" \
-                " libpipewire-0.3-dev libspa-0.2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libglu1-mesa-dev libsdl2-dev libcurl4-openssl-dev libnm-dev libbluetooth-dev"
+                " libpipewire-0.3-dev libspa-0.2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libglu1-mesa-dev libcurl4-openssl-dev libnm-dev libbluetooth-dev"
             ;;
         riscv64)
             printf '%s' \
@@ -149,7 +149,7 @@ get_dev_packages() {
                 " libxkbcommon-dev libsystemd-dev libpam0g-dev libpwquality-dev" \
                 " libgcrypt20-dev libapt-pkg-dev" \
                 " libjpeg-dev libpng-dev libtiff-dev libwebp-dev libicns-dev" \
-                " libpipewire-0.3-dev libspa-0.2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libglu1-mesa-dev libsdl2-dev libcurl4-openssl-dev libnm-dev libbluetooth-dev"
+                " libpipewire-0.3-dev libspa-0.2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libglu1-mesa-dev libcurl4-openssl-dev libnm-dev libbluetooth-dev"
             ;;
         *)
             die "No dev package list for architecture: $_arch"
