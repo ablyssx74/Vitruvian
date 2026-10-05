@@ -91,6 +91,7 @@ struct State {
 	std::deque<SDL_Event> queue;
 	sem_id			eventSem;
 	sem_id			readySem;
+	bool			appFailed;
 	thread_id		appThread;
 	bool			allowQuit;
 	int32			mouseX, mouseY;
@@ -104,7 +105,7 @@ struct State {
 	HDWindow*		window;
 
 	State()
-		: lock("hd events"), eventSem(-1), readySem(-1), appThread(-1),
+		: lock("hd events"), eventSem(-1), readySem(-1), appFailed(false), appThread(-1),
 		allowQuit(false), mouseX(0), mouseY(0), buttons(0),
 		mouseInside(false), resizeLock("hd resize"), pendingW(0),
 		pendingH(0), resizePending(false), startTime(0), window(NULL)
@@ -322,9 +323,20 @@ private:
 };
 
 
+// A BLooper is locked by the thread that constructs it, and Run() must be
+// called from that same thread: build the application here, not in main.
 inline int32 HD_AppThread(void*)
 {
-	be_app->Run();
+	hdvos::State& state = hdvos::S();
+	HDApp* app = new HDApp();
+	if (app->InitCheck() != B_OK) {
+		state.appFailed = true;
+		release_sem(state.readySem);
+		delete app;
+		return -1;
+	}
+	app->Run();
+	delete app;
 	return 0;
 }
 
@@ -335,14 +347,14 @@ inline int SDL_Init(Uint32)
 	s.eventSem = create_sem(0, "hd events");
 	s.readySem = create_sem(0, "hd app ready");
 	s.startTime = system_time();
-	new HDApp();
 	s.appThread = spawn_thread(HD_AppThread, "hdesktop app", B_NORMAL_PRIORITY,
 		NULL);
 	if (s.appThread < 0)
 		return -1;
 	resume_thread(s.appThread);
 	// Wait for the looper to run before any window is created.
-	if (acquire_sem_etc(s.readySem, 1, B_RELATIVE_TIMEOUT, 10000000) != B_OK)
+	if (acquire_sem_etc(s.readySem, 1, B_RELATIVE_TIMEOUT, 10000000) != B_OK
+			|| s.appFailed)
 		return -1;
 	return 0;
 }
