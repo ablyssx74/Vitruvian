@@ -37,7 +37,9 @@
 #include <iostream>
 #include <Locker.h>
 #include <map>
+#ifndef VITRUVIAN
 #include <MediaNode.h>
+#endif
 #ifndef VITRUVIAN
 #include <MediaRoster.h>
 #endif
@@ -51,7 +53,9 @@
 #include <NodeMonitor.h>
 #include <Notification.h>
 #include <OS.h>
+#ifndef VITRUVIAN
 #include <ParameterWeb.h>
+#endif
 #include <Path.h>
 #include <Picture.h> // BPicture -- TitleListPreviewView's own round-rect clip
 #include <PopUpMenu.h>

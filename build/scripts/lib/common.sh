@@ -149,3 +149,23 @@ generate_manifest() {
 }
 
 
+
+# debootstrap derives its host arch from dpkg, or from `pacman-conf
+# Architecture` on Arch. CachyOS reports several ("x86_64 x86_64_v2 ..."),
+# which debootstrap rejects, so give it an explicit arch file there.
+vos_debootstrap() {
+    if ! command -v dpkg >/dev/null 2>&1 && command -v pacman-conf >/dev/null 2>&1; then
+        _vos_dbdir="$(mktemp -d)"
+        cp -r /usr/share/debootstrap/. "$_vos_dbdir/"
+        case "$(uname -m)" in
+            x86_64) echo amd64 > "$_vos_dbdir/arch" ;;
+            aarch64) echo arm64 > "$_vos_dbdir/arch" ;;
+            riscv64) echo riscv64 > "$_vos_dbdir/arch" ;;
+        esac
+        sudo env DEBOOTSTRAP_DIR="$_vos_dbdir" debootstrap "$@"
+        _vos_rc=$?
+        rm -rf "$_vos_dbdir"
+        return $_vos_rc
+    fi
+    sudo debootstrap "$@"
+}

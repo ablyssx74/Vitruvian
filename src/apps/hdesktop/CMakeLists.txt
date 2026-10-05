@@ -15,3 +15,10 @@ Application(HDesktop
 # Selects the PipeWire volume path instead of BMediaRoster.
 target_compile_definitions(HDesktop PRIVATE VITRUVIAN=1)
 UsePrivateHeaders(HDesktop app interface tracker shared)
+
+# SDL2 pulls in libpulse, whose libpulsecommon lives in a pulseaudio/ subdir
+# that the linker does not search by itself (undefined libpulse references).
+if(VITRUVIAN_CHROOT_BUILD AND VITRUVIAN_CHROOT_PATH AND VITRUVIAN_MULTIARCH_TRIPLE)
+	target_link_options(HDesktop PRIVATE
+		"-Wl,-rpath-link=${VITRUVIAN_CHROOT_PATH}/usr/lib/${VITRUVIAN_MULTIARCH_TRIPLE}/pulseaudio")
+endif()

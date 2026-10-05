@@ -989,7 +989,7 @@ create_raspberry() {
     # Same debootstrap cache the base chroot uses.
     _dbcache="$_basedir/deb/archives"
     mkdir -p "$_dbcache"
-    sudo debootstrap --arch="$_deb_arch" --foreign --cache-dir="$_dbcache" \
+    vos_debootstrap --arch="$_deb_arch" --foreign --cache-dir="$_dbcache" \
         --include=ca-certificates \
         "$VOS_BASE_SUITE" "$_mnt" http://deb.debian.org/debian
 
@@ -1286,7 +1286,7 @@ create_uboot_board() {
     # Reuse the tree's debootstrap cache; see create_raspberry for why.
     _dbcache="$_basedir/deb/archives"
     mkdir -p "$_dbcache"
-    sudo debootstrap --arch="$_deb_arch" --foreign --cache-dir="$_dbcache" \
+    vos_debootstrap --arch="$_deb_arch" --foreign --cache-dir="$_dbcache" \
         --include=ca-certificates \
         "$VOS_BASE_SUITE" "$_mnt" http://deb.debian.org/debian
 

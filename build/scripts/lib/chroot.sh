@@ -73,7 +73,9 @@ mount --bind "$r/proc/sys" "$r/proc/sys" || exit 1
 mount -o remount,bind,ro "$r/proc/sys" || exit 1
 if mountpoint -q "$r/sys"; then umount -R "$r/sys" || exit 1; fi
 mount -t sysfs -o ro sysfs "$r/sys" || exit 1
-exec chroot "$r" "$@"'
+# Use the Debian sbin dirs: a host PATH without them (Arch, where sbin is a
+# symlink missing from the sudo secure_path) hides locale-gen, update-initramfs.
+exec chroot "$r" /usr/bin/env PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin "$@"'
 
 chroot_isolated() {
     _ci_root="$1"
@@ -141,13 +143,13 @@ chroot_create() {
 
     if is_cross_build "$_arch"; then
         log_step "Bootstrapping Debian $VOS_BASE_SUITE ($_deb_arch) [foreign]..."
-        sudo debootstrap --arch="$_deb_arch" --variant=minbase --foreign \
+        vos_debootstrap --arch="$_deb_arch" --variant=minbase --foreign \
             --cache-dir="$_debootstrap_cache" \
             "$VOS_BASE_SUITE" "$_chroot_dir" "$DEBIAN_MIRROR"
         qemu_inject "$_chroot_dir" "$_arch"
     else
         log_step "Bootstrapping Debian $VOS_BASE_SUITE ($_deb_arch)..."
-        sudo debootstrap --arch="$_deb_arch" --variant=minbase \
+        vos_debootstrap --arch="$_deb_arch" --variant=minbase \
             --cache-dir="$_debootstrap_cache" \
             "$VOS_BASE_SUITE" "$_chroot_dir" "$DEBIAN_MIRROR"
     fi

@@ -99,4 +99,5 @@ for d in ../linux-image-*.deb ../linux-headers-*.deb ../linux-libc-dev_*.deb; do
     case $d in *-dbg_*) continue ;; esac
     cp "$d" "$OUTDIR"/
 done
+"$(dirname "$0")/make-kernel-metas.sh" "$OUTDIR" "$KVER-vos-rt"
 echo ">> Done: $(ls "$OUTDIR" | tr '\n' ' ')"

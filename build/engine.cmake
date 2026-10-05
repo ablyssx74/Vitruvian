@@ -21,7 +21,7 @@ if(NOT DEFINED VOS_DYNAMIC_LINKER)
 	execute_process(
 		COMMAND ${CMAKE_C_COMPILER} -dumpmachine
 		OUTPUT_VARIABLE _vos_triple OUTPUT_STRIP_TRAILING_WHITESPACE)
-	if(_vos_triple STREQUAL "x86_64-linux-gnu")
+	if(_vos_triple STREQUAL "x86_64-linux-gnu" OR _vos_triple STREQUAL "x86_64-pc-linux-gnu")
 		set(VOS_DYNAMIC_LINKER "/lib64/ld-linux-x86-64.so.2")
 	elseif(_vos_triple STREQUAL "aarch64-linux-gnu")
 		set(VOS_DYNAMIC_LINKER "/lib/ld-linux-aarch64.so.1")
